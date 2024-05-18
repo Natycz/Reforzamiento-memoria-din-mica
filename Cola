@@ -1,0 +1,79 @@
+#include <iostream>
+
+class Cola {
+private:
+    struct Nodo {
+        int dato;
+        Nodo* siguiente;
+    };
+
+    Nodo* frente;
+    Nodo* final;
+
+public:
+    Cola() : frente(nullptr), final(nullptr) {}
+
+    ~Cola() {
+        while (frente != nullptr) {
+            remove();
+        }
+    }
+
+    void add(int valor) {
+        Nodo* nuevoNodo = new Nodo;
+        nuevoNodo->dato = valor;
+        nuevoNodo->siguiente = nullptr;
+        if (final != nullptr) {
+            final->siguiente = nuevoNodo;
+        } else {
+            frente = nuevoNodo;
+        }
+        final = nuevoNodo;
+    }
+
+    void remove() {
+        if (frente != nullptr) {
+            Nodo* temp = frente;
+            frente = frente->siguiente;
+            delete temp;
+            if (frente == nullptr) {
+                final = nullptr;
+            }
+        } else {
+            std::cout << "La cola esta vacia." << std::endl;
+        }
+    }
+
+    void imprimir() {
+        Nodo* actual = frente;
+        while (actual != nullptr) {
+            std::cout << actual->dato << " ";
+            actual = actual->siguiente;
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    Cola cola;
+
+    cola.add(1);
+    cola.add(2);
+    cola.add(3);
+    cola.imprimir(); // Debe imprimir: 1 2 3
+
+    cola.remove();
+    cola.imprimir(); // Debeimprimir: 2 3
+
+    cola.add(4);
+    cola.imprimir(); // Debe imprimir: 2 3 4
+
+    cola.remove();
+    cola.remove();
+    cola.imprimir(); // Debe imprimir: 4
+
+    cola.remove();
+    cola.imprimir(); // Debe imprimir una línea en blanco
+
+    return 0;
+}
